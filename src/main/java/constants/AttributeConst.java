@@ -41,14 +41,21 @@ public enum AttributeConst {
     DEL_FLAG_TRUE(1),
     DEL_FLAG_FALSE(0),
 
-    //日報管理
+  //日報管理
     REPORT("report"),
     REPORTS("reports"),
     REP_COUNT("reports_count"),
     REP_ID("id"),
     REP_DATE("report_date"),
     REP_TITLE("title"),
-    REP_CONTENT("content_msg");
+    REP_CONTENT("content_msg"),
+
+  //日報管理
+   GOOD("good"),
+    GOODS("goods"),
+    GOD_COUNT("goods_count"),
+    GOD_ID("id"),
+    GOD_CONTENT("content_msg");
 
     private final String text;
     private final Integer i;

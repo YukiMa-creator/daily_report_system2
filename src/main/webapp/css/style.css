@@ -160,3 +160,24 @@ pre{
 h3{
     font-size: larger;
 }
+
+table#good_list th {
+    font-weight: bold;
+    padding: 10px 2%;
+}
+
+table#good_list .good_name {
+    width: 20%;
+    padding: 10px 2%;
+}
+table#good_list .good_date {
+    width: 20%;
+}
+
+table#good_list .good_title {
+    width: 37%;
+}
+
+table#good_list .good_action {
+    width: 13%;
+}

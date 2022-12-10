@@ -47,7 +47,7 @@ public class GoodService extends ServiceBase {
     }
 
     /**
-     * 指定されたページ数の一覧画面に表示する日報データを取得し、GoodViewのリストで返却する
+     * 指定されたページ数の一覧画面に表示するいいねデータを取得し、GoodViewのリストで返却する
      * @param page ページ数
      * @return 一覧画面に表示するデータのリスト
      */
@@ -130,7 +130,7 @@ public class GoodService extends ServiceBase {
 
     /**
      *いいねデータを１件登録する
-     *@param gv 日報データ
+     *@param gv いいねデータ
      */
     private void createInternal(GoodView gv) {
 
