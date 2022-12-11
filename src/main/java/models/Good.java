@@ -1,6 +1,6 @@
 package models;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -81,5 +81,5 @@ public class Good {
      * 登録日時
      */
     @Column(name = JpaConst.GOD_COL_CREATED_AT, nullable = false)
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 }

@@ -59,6 +59,7 @@
                 </c:choose>
             </c:forEach>
         </div>
+        <p><a href="<c:url value='?action=${actGod}&command=${commNew}' />">新規いいねの登録</a></p>
 
     </c:param>
 </c:import>

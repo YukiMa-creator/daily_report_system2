@@ -1,6 +1,6 @@
 package services;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import actions.views.EmployeeConverter;
@@ -87,7 +87,7 @@ public class GoodService extends ServiceBase {
     public List<String> create(GoodView gv) {
         List<String> errors = GoodValidator.validate(gv);
         if (errors.size() == 0) {
-            LocalDateTime ldt = LocalDateTime.now();
+            LocalDate ldt = LocalDate.now();
             gv.setCreatedAt(ldt);
             createInternal(gv);
         }
@@ -109,7 +109,7 @@ public class GoodService extends ServiceBase {
         if (errors.size() == 0) {
 
             //登録日時を現在時刻に設定
-            LocalDateTime ldt = LocalDateTime.now();
+            LocalDate ldt = LocalDate.now();
             gv.setCreatedAt(ldt);
 
             updateInternal(gv);

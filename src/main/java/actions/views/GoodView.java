@@ -1,6 +1,6 @@
 package actions.views;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,5 +41,5 @@ public class GoodView {
     /**
      * 登録日時
      */
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 }

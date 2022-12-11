@@ -17,8 +17,11 @@ public enum AttributeConst {
     TOKEN("_token"),
     ERR("errors"),
 
-    //ログイン中の従業員
+  //ログイン中の従業員
     LOGIN_EMP("login_employee"),
+
+  //いいねを押す日報
+    GOOD_REP("good_report"),
 
     //ログイン画面
     LOGIN_ERR("loginError"),

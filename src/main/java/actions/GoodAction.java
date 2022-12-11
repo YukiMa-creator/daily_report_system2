@@ -63,4 +63,21 @@ public class GoodAction extends ActionBase {
         forward(ForwardConst.FW_GOD_INDEX);
     }
 
+    /**
+    *新規登録画面を表示する
+    *@throws ServletException
+    *@throws IOException
+    */
+    public void entryNew() throws ServletException, IOException {
+
+        putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
+
+        //**いいね情報の空インスタンスに、いいねの日付＝今日の日付を設定する（登録日時）
+        //GoodView gv = new GoodView();
+        //gv.setCreatedAt(LocalDate.now());
+        //putRequestScope(AttributeConst.GOOD, gv); //日付のみ設定済みのいいねインスタンス
+        //新規登録画面を表示
+        forward(ForwardConst.FW_GOD_NEW);
+    }
+
 }
