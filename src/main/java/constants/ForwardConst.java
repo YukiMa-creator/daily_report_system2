@@ -42,6 +42,7 @@ public enum ForwardConst {
     FW_REP_EDIT("reports/edit"),
     FW_GOD_INDEX("goods/index"),
     FW_GOD_NEW("goods/new"),
+    FW_GOD_SHOW("goods/show"),
 
 ;
 

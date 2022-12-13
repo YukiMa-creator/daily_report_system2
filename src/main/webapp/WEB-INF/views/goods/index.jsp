@@ -34,7 +34,7 @@
                         <td class="good_name"><c:out value="${good.employee.name}" /></td>
                         <td class="good_date"><fmt:formatDate value='${goodDay}'
                                 pattern='yyyy-MM-dd' /></td>
-                        <td class="good_title">${report.title}</td>
+                        <td class="good_title">${good.report.title}</td>
                         <td class="good_action"><a
                             href="<c:url value='?action=${actRep}&command=${commshow}$page=${report.id}' />">詳細を見る</a>
                         </td>
@@ -59,7 +59,6 @@
                 </c:choose>
             </c:forEach>
         </div>
-        <p><a href="<c:url value='?action=${actGod}&command=${commNew}' />">新規いいねの登録</a></p>
 
     </c:param>
 </c:import>

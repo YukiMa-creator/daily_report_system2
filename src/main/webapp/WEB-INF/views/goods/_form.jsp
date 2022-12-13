@@ -17,13 +17,16 @@
 <c:out value="${sessionScope.login_employee.name}" />
 <br /><br />
 
-<label>いいねする日報</label>
-<c:out value="${sessionScope.login_report.title}" />
+<input type="hidden" name="${AttributeConst.REPORT.getValue()}" value="${report}" />
+<input type="hidden" name="${AttributeConst.REP_ID.getValue()}" value="${report.id}" />
+<input type="hidden" name="${AttributeConst.REP_TITLE.getValue()}" value="${report.title}" />
+<p>いいねする日報:${report.title}</p><br />
 <br /><br />
 
-<label for="${AttributeConst.REP_CONTENT.getValue()}">内容</label><br />
+<label for="${AttributeConst.GOD_CONTENT.getValue()}">内容</label><br />
 <textarea  name="${AttributeConst.GOD_CONTENT.getValue()}" id="${AttributeConst.GOD_CONTENT.getValue()}" rows="10" cols="50">${good.content}</textarea>
 <br /><br />
+
 <input type="hidden" name="${AttributeConst.GOD_ID.getValue()}" value="${good.id}" />
 <input type="hidden" name="${AttributeConst.TOKEN.getValue()}" value="${_token}" />
 <button type="submit">いいね</button>
