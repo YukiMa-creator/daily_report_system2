@@ -22,6 +22,10 @@
                     <td><c:out value="${good.employee.name}" /></td>
                 </tr>
                 <tr>
+                    <th>日報のタイトル</th>
+                    <td><c:out value="${good.report.title}" /></td>
+                </tr>
+                <tr>
                     <th>内容</th>
                     <td><pre><c:out value="${good.content}" /></pre></td>
                 </tr>

@@ -17,10 +17,7 @@
 <c:out value="${sessionScope.login_employee.name}" />
 <br /><br />
 
-<input type="hidden" name="${AttributeConst.REPORT.getValue()}" value="${report}" />
-<input type="hidden" name="${AttributeConst.REP_ID.getValue()}" value="${report.id}" />
-<input type="hidden" name="${AttributeConst.REP_TITLE.getValue()}" value="${report.title}" />
-<p>いいねする日報:${report.title}</p><br />
+<p>いいねする日報:${good.report.title}</p><br />
 <br /><br />
 
 <label for="${AttributeConst.GOD_CONTENT.getValue()}">内容</label><br />

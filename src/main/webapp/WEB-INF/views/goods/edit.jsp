@@ -9,8 +9,7 @@
     <c:param name="content">
 
         <h2>いいね 編集ページ</h2>
-        <form method="POST" action="<c:url value='?action=${actGod}&command=${commUpd}' />">
-            <c:import url="_form.jsp" />
+        <form method="POST" action="<c:url value='?action=${actGod}&command=${commUpd}' />"><c:import url="_form.jsp" />
         </form>
 
         <p>

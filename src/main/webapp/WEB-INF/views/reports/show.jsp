@@ -29,9 +29,7 @@
                 </tr>
                 <tr>
                     <th>内容</th>
-                    <td><pre>
-                            <c:out value="${report.content}" />
-                        </pre></td>
+                    <td><pre><c:out value="${report.content}" /></pre></td>
                 </tr>
                 <tr>
                     <th>登録日時</th>
@@ -72,9 +70,7 @@
                     <c:forEach var="good" items="${goods}" varStatus="status">
                         <tr class="row${status.count % 2}">
                             <td class="good_name"><c:out value="${good.employee.name}" /></td>
-                            <td class="good_content"><pre>
-                        <c:out value="${good.content}" />
-                    </pre></td>
+                            <td class="good_content"><pre><c:out value="${good.content}" /></pre></td>
                             <td class="good_date"><fmt:parseDate
                                     value="${good.createdAt}" pattern="yyyy-MM-dd" var="createDay"
                                     type="date" /></td>
@@ -92,7 +88,7 @@
 
             <p>
                 <a
-                    href="<c:url value='?action=${actRep}&command=${commShow}&id=${report.id}' />">日報詳細ページに戻る</a>
+                    href="<c:url value='?action=${actGod}&command=${commNew}&id=${good.id}' />">いいね</a>
             </p>
     </c:param>
 </c:import>
