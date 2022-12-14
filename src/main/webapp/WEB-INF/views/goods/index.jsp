@@ -24,7 +24,7 @@
                     <th class="good_name">いいねを押した人</th>
                     <th class="good_date">押した日</th>
                     <th class="good_title">押した日報のタイトル</th>
-                    <th class="good_action">詳細</th>
+                    <th class="good_action">内容</th>
                 </tr>
                 <c:forEach var="good" items="${goods}" varStatus="status">
                     <fmt:parseDate value="${good.createdAt}" pattern="yyyy-MM-dd"
@@ -35,9 +35,7 @@
                         <td class="good_date"><fmt:formatDate value='${goodDay}'
                                 pattern='yyyy-MM-dd' /></td>
                         <td class="good_title">${good.report.title}</td>
-                        <td class="good_action"><a
-                            href="<c:url value='?action=${actRep}&command=${commshow}$page=${report.id}' />">詳細を見る</a>
-                        </td>
+                        <td class="good_action"><a href="<c:url value='?action=${actGod}&command=${commShow}&id=${good.id}' />">内容を見る</a></td>
                     </tr>
                 </c:forEach>
             </tbody>
@@ -59,6 +57,7 @@
                 </c:choose>
             </c:forEach>
         </div>
+        <div id="goo">${param.goo}</div>
 
     </c:param>
 </c:import>

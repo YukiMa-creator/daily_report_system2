@@ -13,7 +13,6 @@ import constants.ForwardConst;
 import constants.JpaConst;
 import constants.MessageConst;
 import services.GoodService;
-import services.ReportService;
 
 /**
  * 日報に関する処理を行うActionクラス
@@ -22,7 +21,6 @@ import services.ReportService;
 public class GoodAction extends ActionBase {
 
     private GoodService service;
-    private ReportService rservice;
 
     /**
      * メソッドを実行する
@@ -97,6 +95,10 @@ public class GoodAction extends ActionBase {
 
             //セッションからいいねを押したい日報を取得
             ReportView rv = (ReportView) getSessionScope(AttributeConst.REPORT);
+            if (rv != null) {
+                putRequestScope(AttributeConst.REPORT, rv);
+                removeSessionScope(AttributeConst.REPORT);
+            }
 
             //パラメータの値をもとに日報インスタンスを作成する
             GoodView gv = new GoodView(
@@ -136,21 +138,50 @@ public class GoodAction extends ActionBase {
      * @throws ServletException
      * @throws IOException
      */
+
     public void show() throws ServletException, IOException {
+
+        //idを条件に日報データを取得する
+        GoodView gv = service.findOne(toNumber(getRequestParam(AttributeConst.GOD_ID)));
+
+        if (gv == null) {
+            //該当の日報データが存在しない場合はエラー画面を表示
+            forward(ForwardConst.FW_ERR_UNKNOWN);
+
+        } else {
+
+            putSessionScope(AttributeConst.GOOD, gv); //取得した日報データ
+
+            //詳細画面を表示
+            forward(ForwardConst.FW_GOD_SHOW);
+        }
+    }
+
+    /**
+     * 編集画面を表示する
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void edit() throws ServletException, IOException {
 
         //idを条件にいいねデータを取得する
         GoodView gv = service.findOne(toNumber(getRequestParam(AttributeConst.GOD_ID)));
 
-        if (gv == null) {
-            //該当のいいねデータが存在しない場合はエラー画面を表示
+        //セッションからログイン中の従業員情報を取得
+        EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+
+        if (gv == null || ev.getId() != gv.getEmployee().getId()) {
+            //該当のいいねデータが存在しない、または
+            //ログインしている従業員がいいねの作成者でない場合はエラー画面を表示
             forward(ForwardConst.FW_ERR_UNKNOWN);
 
         } else {
-            putRequestScope(AttributeConst.GOOD, gv); //取得したいいねデータ
 
-            //詳細画面を表示
-            forward(ForwardConst.FW_REP_SHOW);
+            putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
+            putRequestScope(AttributeConst.GOOD, gv); //取得した日報データ
 
+            //編集画面を表示
+            forward(ForwardConst.FW_GOD_EDIT);
         }
     }
 }

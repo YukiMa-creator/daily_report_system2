@@ -12,6 +12,7 @@
 
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
 <c:set var="commOut" value="${ForwardConst.CMD_LOGOUT.getValue()}" />
+<c:set var="commShow" value="${ForwardConst.CMD_SHOW.getValue()}" />
 
 <!DOCTYPE html>
 <html lang="ja">

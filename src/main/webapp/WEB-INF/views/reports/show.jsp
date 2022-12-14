@@ -29,7 +29,9 @@
                 </tr>
                 <tr>
                     <th>内容</th>
-                    <td><pre><c:out value="${report.content}" /></pre></td>
+                    <td><pre>
+                            <c:out value="${report.content}" />
+                        </pre></td>
                 </tr>
                 <tr>
                     <th>登録日時</th>
@@ -58,32 +60,39 @@
         <p>
             <a href="<c:url value='?action=${actRep}&command=${commIdx}' />">一覧に戻る</a>
         </p>
-        <h3>この日報に対するいいね一覧</h3>
-        <table id="good_list">
-            <tbody>
-                <tr>
-                    <th class="good_name">氏名</th>
-                    <th class="good_content">内容</th>
-                    <th class="good_date">登録日時</th>
-                </tr>
-                <c:forEach var="good" items="${goods}" varStatus="status">
-                    <tr class="row${status.count % 2}">
-                        <td class="good_name"><c:out value="${good.employee.name}" /></td>
-                        <td class="good_content"><pre><c:out value="${good.content}" /></pre></td>
-                        <td class="good_date"><fmt:parseDate value="${good.createdAt}" pattern="yyyy-MM-dd" var="createDay" type="date" /></td>
+
+            <h3>いいね 詳細</h3>
+            <table id="good_list">
+                <tbody>
+                    <tr>
+                        <th class="good_name">氏名</th>
+                        <th class="good_content">内容</th>
+                        <th class="good_date">登録日時</th>
                     </tr>
-                </c:forEach>
-            </tbody>
-        </table>
+                    <c:forEach var="good" items="${goods}" varStatus="status">
+                        <tr class="row${status.count % 2}">
+                            <td class="good_name"><c:out value="${good.employee.name}" /></td>
+                            <td class="good_content"><pre>
+                        <c:out value="${good.content}" />
+                    </pre></td>
+                            <td class="good_date"><fmt:parseDate
+                                    value="${good.createdAt}" pattern="yyyy-MM-dd" var="createDay"
+                                    type="date" /></td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
 
-        <p>
-            <a href="<c:url value='?action=${actGod}&command=${commIdx}' />">いいね一覧に戻る</a>
-        </p>
+            <c:if test="${sessionScope.login_employee.id == good.employee.id}">
+                <p>
+                    <a
+                        href="<c:url value='?action=${actGod}&command=${commEdt}&id=${good.id}' />">いいねの内容を編集する</a>
+                </p>
+            </c:if>
 
-        <p>
-            <a href="<c:url value='?action=${actGod}&command=${commNew}&id=${report.id}' />">いいね</a>
-        </p>
-
-
+            <p>
+                <a
+                    href="<c:url value='?action=${actRep}&command=${commShow}&id=${report.id}' />">日報詳細ページに戻る</a>
+            </p>
     </c:param>
 </c:import>
