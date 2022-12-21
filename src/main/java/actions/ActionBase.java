@@ -196,6 +196,15 @@ public abstract class ActionBase {
     }
 
     /**
+     * リクエストパラメータから引数で指定したパラメータ名の値を返却する
+     * @param key パラメータ名
+     * @return パラメータの値
+     */
+    protected String getRequestParam(String key) {
+        return request.getParameter(key);
+    }
+
+    /**
      * リクエストスコープにパラメータを設定する
      * @param key パラメータ名
      * @param value パラメータの値
@@ -203,6 +212,7 @@ public abstract class ActionBase {
     protected <V> void putRequestScope(AttributeConst key, V value) {
         request.setAttribute(key.getValue(), value);
     }
+
 
     /**
      * セッションスコープから指定されたパラメータの値を取得し、返却する

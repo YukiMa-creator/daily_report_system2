@@ -3,10 +3,14 @@ package services;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import actions.views.EmployeeConverter;
 import actions.views.EmployeeView;
 import actions.views.GoodConverter;
 import actions.views.GoodView;
+import actions.views.ReportConverter;
+import actions.views.ReportView;
 import constants.JpaConst;
 import models.Good;
 import models.validators.GoodValidator;
@@ -33,6 +37,22 @@ public class GoodService extends ServiceBase {
     }
 
     /**
+     * 指定した日報が作成したいいねデータを、指定されたページ数の一覧画面に表示する分取得しGoodViewのリストで返却する
+     * @param report 従業員
+     * @param page ページ数
+     * @return 一覧画面に表示するデータのリスト
+     */
+    public List<GoodView> getMinePerPageReport(ReportView report, int page) {
+
+        List<Good> goodReports = em.createNamedQuery(JpaConst.Q_GOD_GET_ALL_MINE_REPORT, Good.class)
+                .setParameter(JpaConst.JPQL_PARM_REPORT, ReportConverter.toModel(report))
+                .setFirstResult(JpaConst.ROW_PER_PAGE * (page - 1))
+                .setMaxResults(JpaConst.ROW_PER_PAGE)
+                .getResultList();
+        return GoodConverter.toViewList(goodReports);
+    }
+
+    /**
      * 指定した従業員が作成したいいねデータの件数を取得し、返却する
      * @param employee
      * @return いいねデータの件数
@@ -44,6 +64,54 @@ public class GoodService extends ServiceBase {
                 .getSingleResult();
 
         return count;
+    }
+
+
+   /** 日報が作成したいいねデータの件数を取得し、返却する
+    * @param report
+    * @return いいねデータの件数
+    */
+   public long countAllMineGood(ReportView report) {
+
+       long countGood = (long) em.createNamedQuery(JpaConst.Q_GOD_COUNT_ALL_MINE_REPORT, Long.class)
+               .setParameter(JpaConst.JPQL_PARM_REPORT, ReportConverter.toModel(report))
+               .getSingleResult();
+
+       return countGood;
+   }
+
+    /**
+     * 指定した日報が作成したいいねデータの件数を取得し、返却する
+     * @param employee
+     * @return いいねデータの件数
+     */
+    public long countAllMineReport(ReportView report) {
+
+        long countReport = (long) em.createNamedQuery(JpaConst.Q_GOD_GET_ALL_MINE_REPORT, Long.class)
+                .setParameter(JpaConst.JPQL_PARM_REPORT, ReportConverter.toModel(report))
+                .getSingleResult();
+
+        return countReport;
+    }
+
+    /**
+     * report_idを条件に取得したデータをGoodViewのインスタンスで返却する
+     * @param report 日報
+     * @return 取得データのインスタンス 取得できない場合null
+     */
+    public GoodView findOne(String report) {
+        Good g = null;
+        try {
+            //report_idを条件に未削除のいいねを1件取得する
+            g = em.createNamedQuery(JpaConst.Q_GOD_GET_BY_REPORT_ID, Good.class)
+                    .setParameter(JpaConst.JPQL_PARM_REPORT, report)
+                    .getSingleResult();
+
+        } catch (NoResultException ex) {
+        }
+
+        return GoodConverter.toView(g);
+
     }
 
     /**
@@ -120,6 +188,16 @@ public class GoodService extends ServiceBase {
     }
 
     /**
+     * idを条件に従業員データを削除する
+     * @param id
+     */
+    public GoodView destroy(GoodView gv) {
+        destroyInternal(gv);
+        return gv;
+    }
+
+
+    /**
      * idを条件にデータを１件取得する
      * @param id
      * @return 取得データのインスタンス
@@ -147,6 +225,17 @@ public class GoodService extends ServiceBase {
         em.getTransaction().begin();
         Good g = findOneInternal(gv.getId());
         GoodConverter.copyViewToModel(g, gv);
+        em.getTransaction().commit();
+    }
+
+    /**
+     * いいねデータを削除する
+     * @param gv いいねデータ
+     */
+    private void destroyInternal(GoodView gv) {
+        em.getTransaction().begin();
+        //Good g = findOneInternal(gv.getId());
+        em.remove(GoodConverter.toModel(gv));
         em.getTransaction().commit();
     }
 }

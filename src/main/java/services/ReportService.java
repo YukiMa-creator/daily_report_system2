@@ -5,9 +5,12 @@ import java.util.List;
 
 import actions.views.EmployeeConverter;
 import actions.views.EmployeeView;
+import actions.views.GoodConverter;
+import actions.views.GoodView;
 import actions.views.ReportConverter;
 import actions.views.ReportView;
 import constants.JpaConst;
+import models.Good;
 import models.Report;
 import models.validators.ReportValidator;
 
@@ -80,6 +83,15 @@ public class ReportService extends ServiceBase {
     }
 
     /**
+     * いいねした日報を条件に取得したデータをGoodViewのインスタンスで返却する
+     * @param id
+     * @return 取得データのインスタンス
+     */
+    public GoodView findOne(GoodView rv) {
+        return GoodConverter.toView(findOneInternal(rv));
+    }
+
+    /**
      * 画面から入力された日報の登録内容を元にデータを1件作成し、日報テーブルに登録する
      * @param rv 日報の登録内容
      * @return バリデーションで発生したエラーのリスト
@@ -127,6 +139,15 @@ public class ReportService extends ServiceBase {
      */
     private Report findOneInternal(int id) {
         return em.find(Report.class, id);
+    }
+
+    /**
+     * idを条件にデータを1件取得する
+     * @param id
+     * @return 取得データのインスタンス
+     */
+    private Good findOneInternal(GoodView rv) {
+        return em.find(Good.class, rv);
     }
 
     /**

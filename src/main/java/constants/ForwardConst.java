@@ -13,6 +13,7 @@ public enum ForwardConst {
     ACT_REP("Report"),
     ACT_AUTH("Auth"),
     ACT_GOD("Good"),
+    ACT_MGOD("MyGood"),
 
     //command
     CMD("command"),
@@ -27,9 +28,12 @@ public enum ForwardConst {
     CMD_EDIT("edit"),
     CMD_UPDATE("update"),
     CMD_DESTROY("destroy"),
+    CMD_SHOWGOOD("showGood"),
 
     //jsp
     FW_ERR_UNKNOWN("error/unknown"),
+    FW_ERR_NERROR("error/nerror"),
+    FW_ERR_SERROR("error/serror"),
     FW_TOP_INDEX("topPage/index"),
     FW_LOGIN("login/login"),
     FW_EMP_INDEX("employees/index"),
@@ -44,6 +48,7 @@ public enum ForwardConst {
     FW_GOD_NEW("goods/new"),
     FW_GOD_SHOW("goods/show"),
     FW_GOD_EDIT("goods/edit"),
+    FW_MGOD_INDEX("mgoods/index"),
 
 
 ;

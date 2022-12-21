@@ -3,12 +3,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page import="constants.ForwardConst"%>
+<%@ page import="constants.AttributeConst"%>
 
 <c:set var="actRep" value="${ForwardConst.ACT_REP.getValue()}" />
 <c:set var="actGod" value="${ForwardConst.ACT_GOD.getValue()}" />
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
 <c:set var="commEdt" value="${ForwardConst.CMD_EDIT.getValue()}" />
 <c:set var="commNew" value="${ForwardConst.CMD_NEW.getValue()}" />
+<c:set var="commDry" value="${ForwardConst.CMD_DESTROY.getValue()}" />
 
 <c:import url="/WEB-INF/views/layout/app.jsp">
     <c:param name="content">
@@ -59,36 +61,42 @@
             <a href="<c:url value='?action=${actRep}&command=${commIdx}' />">一覧に戻る</a>
         </p>
 
-            <h3>いいね 詳細</h3>
-            <table id="good_list">
-                <tbody>
-                    <tr>
-                        <th class="good_name">氏名</th>
-                        <th class="good_content">内容</th>
-                        <th class="good_date">登録日時</th>
-                    </tr>
-                    <c:forEach var="good" items="${goods}" varStatus="status">
-                        <tr class="row${status.count % 2}">
-                            <td class="good_name"><c:out value="${good.employee.name}" /></td>
-                            <td class="good_content"><pre><c:out value="${good.content}" /></pre></td>
-                            <td class="good_date"><fmt:parseDate
-                                    value="${good.createdAt}" pattern="yyyy-MM-dd" var="createDay"
-                                    type="date" /></td>
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
+        <h3>いいね 一覧</h3>
+        <table id="good_list">
+            <tbody>
+                <tr>
+                    <th class="good_name">氏名</th>
+                    <th class="good_content">内容</th>
+                    <th class="good_date">登録日時</th>
+                </tr>
+                <c:forEach var="good" items="${goods}" varStatus="status">
+                    <fmt:parseDate value="${good.createdAt}" pattern="yyyy-MM-dd"
+                        var="createDay" type="date" />
 
-            <c:if test="${sessionScope.login_employee.id == good.employee.id}">
+                    <tr class="row${status.count % 2}">
+                        <td class="good_name"><c:out value="${good.employee.name}" /></td>
+                        <td class="good_content"><pre><c:out value="${good.content}" /></pre></td>
+                        <td class="good_date"><fmt:formatDate value='${createDay}'
+                                pattern='yyyy-MM-dd' /></td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+
+                <c:set var="good" value="${gv}"/>
+<p><c:out value="${good.report.title}"/></p>
+        <c:choose>
+            <c:when test="${good.employee.name == sessionScope.login_employee.name && good.rv.title == sessionScope.rv.title}">
                 <p>
                     <a
-                        href="<c:url value='?action=${actGod}&command=${commEdt}&id=${good.id}' />">いいねの内容を編集する</a>
+                        href="<c:url value='?action=${actGod}&command=${commDry}&id=${good.id}' />">いいねを解除する</a>
                 </p>
-            </c:if>
-
+                </c:when>
+            <c:otherwise>
             <p>
-                <a
-                    href="<c:url value='?action=${actGod}&command=${commNew}&id=${good.id}' />">いいね</a>
-            </p>
+                    <a href="<c:url value='?action=${actGod}&command=${commNew}&id=${good.id}' />">いいね</a>
+                </p>
+    </c:otherwise>
+    </c:choose>
     </c:param>
 </c:import>

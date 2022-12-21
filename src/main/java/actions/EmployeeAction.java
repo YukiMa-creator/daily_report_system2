@@ -67,9 +67,9 @@ public class EmployeeAction extends ActionBase {
             //一覧画面を表示
             forward(ForwardConst.FW_EMP_INDEX);
 
-        } //追記
+       } //追記
 
-    }
+  }
 
     /**
      * 新規登録画面を表示する
@@ -79,14 +79,14 @@ public class EmployeeAction extends ActionBase {
     public void entryNew() throws ServletException, IOException {
 
         //管理者かどうかのチェック //追記
-        if (checkAdmin()) { //追記
+      if (checkAdmin()) { //追記
             putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
             putRequestScope(AttributeConst.EMPLOYEE, new EmployeeView()); //空の従業員インスタンス
 
             //新規登録画面を表示
             forward(ForwardConst.FW_EMP_NEW);
         } //追記
-    }
+       }
 
     /**
      * 新規登録を行う
@@ -96,7 +96,7 @@ public class EmployeeAction extends ActionBase {
     public void create() throws ServletException, IOException {
 
         //CSRF対策 tokenのチェック
-        if (checkAdmin() && checkToken()) { //追記
+        if (checkAdmin() &&  checkToken()) { //追記
 
             //パラメータの値を元に従業員情報のインスタンスを作成する
             EmployeeView ev = new EmployeeView(
@@ -146,7 +146,7 @@ public class EmployeeAction extends ActionBase {
     public void show() throws ServletException, IOException {
 
         //管理者かどうかのチェック //追記
-        if (checkAdmin()) { //追記
+       if (checkAdmin()) { //追記
 
             //idを条件に従業員データを取得する
             EmployeeView ev = service.findOne(toNumber(getRequestParam(AttributeConst.EMP_ID)));
@@ -164,7 +164,7 @@ public class EmployeeAction extends ActionBase {
             forward(ForwardConst.FW_EMP_SHOW);
         } //追記
 
-    }
+ }
 
     /**
      * 編集画面を表示する
@@ -174,7 +174,7 @@ public class EmployeeAction extends ActionBase {
     public void edit() throws ServletException, IOException {
 
         //管理者かどうかのチェック //追記
-        if (checkAdmin()) { //追記
+       if (checkAdmin()) { //追記
 
             //idを条件に従業員データを取得する
             EmployeeView ev = service.findOne(toNumber(getRequestParam(AttributeConst.EMP_ID)));
@@ -193,7 +193,7 @@ public class EmployeeAction extends ActionBase {
             forward(ForwardConst.FW_EMP_EDIT);
 
         } //追記
-    }
+   }
 
     /**
      * 更新を行う

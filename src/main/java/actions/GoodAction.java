@@ -13,6 +13,7 @@ import constants.ForwardConst;
 import constants.JpaConst;
 import constants.MessageConst;
 import services.GoodService;
+import services.ReportService;
 
 /**
  * 日報に関する処理を行うActionクラス
@@ -21,6 +22,7 @@ import services.GoodService;
 public class GoodAction extends ActionBase {
 
     private GoodService service;
+    private ReportService rservice;
 
     /**
      * メソッドを実行する
@@ -29,10 +31,12 @@ public class GoodAction extends ActionBase {
     public void process() throws ServletException, IOException {
 
         service = new GoodService();
+        rservice = new ReportService();
 
         //メソッドを実行
         invoke();
         service.close();
+        rservice.close();
     }
 
     /**
@@ -76,6 +80,8 @@ public class GoodAction extends ActionBase {
         putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
         GoodView gv = new GoodView();
         putRequestScope(AttributeConst.GOOD, gv); //空のいいねインスタンス
+        ReportView rv = (ReportView) getSessionScope(AttributeConst.REPORT);
+        putRequestScope(AttributeConst.REPORT, rv);
         //新規登録画面を表示
         forward(ForwardConst.FW_GOD_NEW);
     }
@@ -95,41 +101,43 @@ public class GoodAction extends ActionBase {
 
             //セッションからいいねを押したい日報を取得
             ReportView rv = (ReportView) getSessionScope(AttributeConst.REPORT);
-            if (rv != null) {
-                putRequestScope(AttributeConst.REPORT, rv);
-                removeSessionScope(AttributeConst.REPORT);
-            }
 
-            //パラメータの値をもとに日報インスタンスを作成する
-            GoodView gv = new GoodView(
-                    null,
-                    ev, //ログインしている従業員を、いいね作成者として登録する
-                    rv, //いいねしたい日報を、いいね押した日報として登録する
-                    getRequestParam(AttributeConst.GOD_CONTENT),
-                    null);
-
-            //いいね情報登録
-            List<String> errors = service.create(gv);
-
-            if (errors.size() > 0) {
-                //登録中にエラーがあった場合
-                putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
-                putRequestScope(AttributeConst.GOOD, gv); //入力されたいいね情報
-                putRequestScope(AttributeConst.ERR, errors); //エラーのリスト
-
-                //新規登録画面を再表示
-                forward(ForwardConst.FW_GOD_NEW);
+            if (ev.getId() == rv.getEmployee().getId()) {
+                //ログインしている従業員が日報の作成者の場合はエラー画面を表示
+                //エラー画面を再表示
+                forward(ForwardConst.FW_ERR_NERROR);
 
             } else {
-                //登録中にエラーがなかった場合
 
-                //セッションに登録完了のフラッシュメッセージを設定
-                putSessionScope(AttributeConst.FLUSH, MessageConst.I_REGISTERED.getMessage());
+                //パラメータの値をもとに日報インスタンスを作成する
+                GoodView gv = new GoodView(
+                        null,
+                        ev, //ログインしている従業員を、いいね作成者として登録する
+                        rv, //いいねしたい日報を、いいね押した日報として登録する
+                        getRequestParam(AttributeConst.GOD_CONTENT),
+                        null);
 
-                //一覧画面にリダイレクト
-                redirect(ForwardConst.ACT_GOD, ForwardConst.CMD_INDEX);
+                //いいね情報登録
+                List<String> errors = service.create(gv);
+
+                if (errors.size() > 0) {
+                    //登録中にエラーがあった場合
+                    putRequestScope(AttributeConst.GOOD, gv); //入力されたいいね情報
+                    putRequestScope(AttributeConst.ERR, errors); //エラーのリスト
+
+                    //編集画面を再表示
+                    forward(ForwardConst.FW_GOD_NEW);
+
+                } else {
+                    //更新中にエラーがなかった場合
+
+                    //セッションに更新完了のフラッシュメッセージを設定
+                    putSessionScope(AttributeConst.FLUSH, MessageConst.I_REGISTERED.getMessage());
+
+                    //一覧画面にリダイレクト
+                    redirect(ForwardConst.ACT_GOD, ForwardConst.CMD_INDEX);
+                }
             }
-
         }
     }
 
@@ -143,14 +151,16 @@ public class GoodAction extends ActionBase {
 
         //idを条件に日報データを取得する
         GoodView gv = service.findOne(toNumber(getRequestParam(AttributeConst.GOD_ID)));
+        ReportView rv = rservice.findOne(toNumber(getRequestParam(AttributeConst.GOD_REPORT)));
 
-        if (gv == null) {
+        if (gv == null && rv == null) {
             //該当の日報データが存在しない場合はエラー画面を表示
             forward(ForwardConst.FW_ERR_UNKNOWN);
 
         } else {
 
-            putSessionScope(AttributeConst.GOOD, gv); //取得した日報データ
+            putSessionScope(AttributeConst.GOOD, gv); //取得したいいねデータ
+            putSessionScope(AttributeConst.REPORT, rv); //取得した日報データ
 
             //詳細画面を表示
             forward(ForwardConst.FW_GOD_SHOW);
@@ -179,6 +189,8 @@ public class GoodAction extends ActionBase {
 
             putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
             putRequestScope(AttributeConst.GOOD, gv); //取得した日報データ
+            ReportView rv = (ReportView) getSessionScope(AttributeConst.REPORT);
+            putRequestScope(AttributeConst.REPORT, rv);
 
             //編集画面を表示
             forward(ForwardConst.FW_GOD_EDIT);
@@ -193,35 +205,48 @@ public class GoodAction extends ActionBase {
     public void update() throws ServletException, IOException {
 
         //CSRF対策 tokenのチェック
-        if(checkToken()) {
+        if (checkToken()) {
 
             //idを条件にいいねデータを取得する
             GoodView gv = service.findOne(toNumber(getRequestParam(AttributeConst.GOD_ID)));
 
             //入力されたいいね内容を設定する
-           gv.setContent(getRequestParam(AttributeConst.GOD_CONTENT));
+            gv.setContent(getRequestParam(AttributeConst.GOD_CONTENT));
 
-           //いいねデータを更新する
-           List<String> errors = service.update(gv);
+            //いいねデータを更新する
+            List<String> errors = service.update(gv);
 
-           if(errors.size() > 0) {
-               //更新中にエラーが発生した場合
+            if (errors.size() > 0) {
+                //更新中にエラーが発生した場合
 
-               putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
-               putRequestScope(AttributeConst.GOOD, gv); //入力されたいいね情報
-               putRequestScope(AttributeConst.ERR, errors); //エラーのリスト
+                putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
+                putRequestScope(AttributeConst.GOOD, gv); //入力されたいいね情報
+                putRequestScope(AttributeConst.ERR, errors); //エラーのリスト
 
-               //編集画面を再表示
-               forward(ForwardConst.FW_GOD_EDIT);
-           } else {
-               //更新中にエラーがなかった場合
+                //編集画面を再表示
+                forward(ForwardConst.FW_GOD_EDIT);
+            } else {
+                //更新中にエラーがなかった場合
 
-               //セッションに更新完了のフラッシュメッセージを設定
-               putSessionScope(AttributeConst.FLUSH, MessageConst.I_UPDATED.getMessage());
+                //セッションに更新完了のフラッシュメッセージを設定
+                putSessionScope(AttributeConst.FLUSH, MessageConst.I_UPDATED.getMessage());
 
-               //一覧画面にリダイレクト
-               redirect(ForwardConst.ACT_GOD, ForwardConst.CMD_INDEX);
-           }
+                //一覧画面にリダイレクト
+                redirect(ForwardConst.ACT_GOD, ForwardConst.CMD_INDEX);
+            }
         }
+    }
+
+    public void destroy() throws ServletException, IOException {
+
+        //idを条件にいいねデータを取得する
+        GoodView gv = service.findOne(toNumber(getRequestParam(AttributeConst.GOD_ID)));
+
+        //いいねデータを削除する
+        //いいねデータを更新する
+        service.destroy(gv);
+        //一覧画面にリダイレクト
+        redirect(ForwardConst.ACT_GOD, ForwardConst.CMD_INDEX);
+
     }
 }

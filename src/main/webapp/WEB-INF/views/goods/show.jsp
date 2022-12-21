@@ -32,7 +32,8 @@
                 <tr>
                     <th>登録日時</th>
                     <fmt:parseDate value="${good.createdAt}" pattern="yyyy-MM-dd" var="createDay" type="date" />
-                    <td><fmt:formatDate value="${createDay}" pattern="yyyy-MM-dd" /></td>
+                    <td><fmt:parseDate value="${good.createdAt}" pattern="yyyy-MM-dd" var="createDay" type="date" />
+                    <fmt:formatDate value="${createDay}" pattern="yyyy-MM-dd" /></td>
                 </tr>
             </tbody>
         </table>

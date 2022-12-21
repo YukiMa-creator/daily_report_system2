@@ -28,6 +28,8 @@ public class GoodValidator {
         return errors;
     }
 
+
+
     /**
      * 内容に入力値があるかをチェックし、入力値がなければエラーメッセージを返却
      *@param content 内容
@@ -41,4 +43,5 @@ public class GoodValidator {
         //入力値がある場合は空文字を返却
         return "";
     }
+
 }

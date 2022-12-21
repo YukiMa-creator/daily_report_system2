@@ -6,15 +6,16 @@
 <c:set var="action" value="${ForwardConst.ACT_GOD.getValue()}" />
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
 <c:set var="commCrt" value="${ForwardConst.CMD_CREATE.getValue()}" />
+<c:set var="commDry" value="${ForwardConst.CMD_DESTROY.getValue()}" />
 
 <c:import url="/WEB-INF/views/layout/app.jsp">
     <c:param name="content">
         <h2>いいね 新規登録ページ</h2>
 
-        <form method="POST"
-            action="<c:url value='?action=${action}&command=${commCrt}' />">
-            <c:import url="_form.jsp" />
-        </form>
+                <form method="POST"
+                    action="<c:url value='?action=${action}&command=${commCrt}' />">
+                    <c:import url="_form.jsp" />
+                </form>
 
         <p>
             <a href="<c:url value='?action=${action}&command=${commIdx}' />">一覧に戻る</a>

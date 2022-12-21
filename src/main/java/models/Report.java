@@ -63,6 +63,7 @@ public class Report {
     @JoinColumn(name = JpaConst.REP_COL_EMP, nullable = false)
     private Employee employee;
 
+
     /**
      * いつの日報かを示す日付
      */

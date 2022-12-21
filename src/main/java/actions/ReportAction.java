@@ -7,11 +7,13 @@ import java.util.List;
 import javax.servlet.ServletException;
 
 import actions.views.EmployeeView;
+import actions.views.GoodView;
 import actions.views.ReportView;
 import constants.AttributeConst;
 import constants.ForwardConst;
 import constants.JpaConst;
 import constants.MessageConst;
+import services.GoodService;
 import services.ReportService;
 
 /**
@@ -21,6 +23,7 @@ import services.ReportService;
 public class ReportAction extends ActionBase {
 
     private ReportService service;
+    private GoodService gservice;
 
     /**
      * メソッドを実行する
@@ -29,10 +32,12 @@ public class ReportAction extends ActionBase {
     public void process() throws ServletException, IOException {
 
         service = new ReportService();
+        gservice = new GoodService();
 
         //メソッドを実行
         invoke();
         service.close();
+        gservice.close();
     }
 
     /**
@@ -159,9 +164,27 @@ public class ReportAction extends ActionBase {
             putRequestScope(AttributeConst.REPORT, rv); //取得した日報データ
             putSessionScope(AttributeConst.REPORT, rv); //取得した日報データ
 
-                //詳細画面を表示
-                forward(ForwardConst.FW_REP_SHOW);
-            }
+            //reportを条件にいいねデータを取得する
+            GoodView gv = gservice.findOne(getRequestParam(AttributeConst.GOD_REPORT));
+            putRequestScope(AttributeConst.GOOD, gv);
+
+            //ログイン中の従業員が作成した日報データを、指定されたページ数の一覧画面に表示する分取得する
+            //日報が作成したいいねデータを、指定されたページ数の一覧画面に表示する分取得する
+            int page = getPage();
+            List<GoodView> goods = gservice.getMinePerPageReport(rv, page);
+
+            //ログイン中の従業員が作成した日報データの件数を取得
+            //日報が作成したいいねデータの件数を取得
+            long myGoodsCount = gservice.countAllMineGood(rv);
+
+            putRequestScope(AttributeConst.GOODS, goods); //取得したいいねデータ
+            putRequestScope(AttributeConst.GOD_COUNT, myGoodsCount); //ログイン中の従業員が作成した日報の数
+            putRequestScope(AttributeConst.PAGE, page); //ページ数
+            putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE); //1ページに表示するレコードの数
+
+            //詳細画面を表示
+            forward(ForwardConst.FW_REP_SHOW);
+        }
     }
 
     /**
@@ -234,5 +257,11 @@ public class ReportAction extends ActionBase {
 
             }
         }
+    }
+
+    //日報の詳細ページの下に自分がいいねされた日報の一覧を表示する
+
+    public void showGood() throws ServletException, IOException {
+
     }
 }

@@ -53,10 +53,11 @@ public enum AttributeConst {
     REP_TITLE("title"),
     REP_CONTENT("content_msg"),
 
-  //日報管理
+  //いいね管理
    GOOD("good"),
     GOODS("goods"),
     GOD_COUNT("goods_count"),
+    GOD_REPORT("good_report"),
     GOD_ID("id"),
     GOD_CONTENT("content_msg");
 
