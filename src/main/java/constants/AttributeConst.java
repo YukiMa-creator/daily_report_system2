@@ -57,7 +57,8 @@ public enum AttributeConst {
    GOOD("good"),
     GOODS("goods"),
     GOD_COUNT("goods_count"),
-    GOD_REPORT("good_report"),
+    MY_GOD_COUNT("good_count"),
+    GOD_REPORT("good_report_id"),
     GOD_ID("id"),
     GOD_CONTENT("content_msg");
 

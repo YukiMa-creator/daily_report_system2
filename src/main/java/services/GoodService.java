@@ -59,7 +59,7 @@ public class GoodService extends ServiceBase {
      */
     public long countAllMine(EmployeeView employee) {
 
-        long count = (long) em.createNamedQuery(JpaConst.Q_GOD_GET_ALL_MINE, Long.class)
+        long count = (long) em.createNamedQuery(JpaConst.Q_GOD_COUNT_ALL_MINE, Long.class)
                 .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, EmployeeConverter.toModel(employee))
                 .getSingleResult();
 
@@ -188,12 +188,15 @@ public class GoodService extends ServiceBase {
     }
 
     /**
-     * idを条件に従業員データを削除する
+     * いいねデータを削除する
      * @param id
      */
     public GoodView destroy(GoodView gv) {
-        destroyInternal(gv);
-        return gv;
+        em.getTransaction().begin();
+        Good g = findOneInternal(gv.getId());
+        em.remove(g);
+        em.getTransaction().commit();
+        return null;
     }
 
 
@@ -231,11 +234,12 @@ public class GoodService extends ServiceBase {
     /**
      * いいねデータを削除する
      * @param gv いいねデータ
-     */
     private void destroyInternal(GoodView gv) {
         em.getTransaction().begin();
-        //Good g = findOneInternal(gv.getId());
-        em.remove(GoodConverter.toModel(gv));
+        Good g = findOneInternal(gv.getId());
+        em.remove(g);
         em.getTransaction().commit();
     }
+         */
+
 }

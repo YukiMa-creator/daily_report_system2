@@ -57,7 +57,6 @@
                 </c:choose>
             </c:forEach>
         </div>
-        <div id="goo">${param.goo}</div>
 
     </c:param>
 </c:import>

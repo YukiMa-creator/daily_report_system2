@@ -20,7 +20,8 @@
 <c:out value="${sessionScope.login_employee.name}" />
 <br /><br />
 
-<p>いいねする日報:${sessionScope.report.title}</p><br />
+<label>いいねする日報</label><br />
+<c:out value="${sessionScope.report.title}" />
 <br /><br />
 
 <label for="${AttributeConst.GOD_CONTENT.getValue()}">内容</label>

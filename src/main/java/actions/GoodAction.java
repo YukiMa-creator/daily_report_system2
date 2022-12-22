@@ -180,6 +180,8 @@ public class GoodAction extends ActionBase {
         //セッションからログイン中の従業員情報を取得
         EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
 
+        ReportView rv = (ReportView) getSessionScope(AttributeConst.REPORT);
+
         if (gv == null || ev.getId() != gv.getEmployee().getId()) {
             //該当のいいねデータが存在しない、または
             //ログインしている従業員がいいねの作成者でない場合はエラー画面を表示
@@ -189,8 +191,7 @@ public class GoodAction extends ActionBase {
 
             putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
             putRequestScope(AttributeConst.GOOD, gv); //取得した日報データ
-            ReportView rv = (ReportView) getSessionScope(AttributeConst.REPORT);
-            putRequestScope(AttributeConst.REPORT, rv);
+            //putRequestScope(AttributeConst.REPORT, rv);
 
             //編集画面を表示
             forward(ForwardConst.FW_GOD_EDIT);
@@ -239,12 +240,16 @@ public class GoodAction extends ActionBase {
 
     public void destroy() throws ServletException, IOException {
 
-        //idを条件にいいねデータを取得する
-        GoodView gv = service.findOne(toNumber(getRequestParam(AttributeConst.GOD_ID)));
+        GoodView gv = getSessionScope(AttributeConst.GOOD);
 
         //いいねデータを削除する
-        //いいねデータを更新する
         service.destroy(gv);
+
+        removeSessionScope(AttributeConst.GOOD);
+
+      //セッションに更新完了のフラッシュメッセージを設定
+        putSessionScope(AttributeConst.FLUSH, MessageConst.I_DELETED.getMessage());
+
         //一覧画面にリダイレクト
         redirect(ForwardConst.ACT_GOD, ForwardConst.CMD_INDEX);
 
