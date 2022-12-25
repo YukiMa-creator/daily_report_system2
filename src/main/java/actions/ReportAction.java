@@ -139,7 +139,6 @@ public class ReportAction extends ActionBase {
 
                 //セッションに登録完了のフラッシュメッセージを設定
                 putSessionScope(AttributeConst.FLUSH, MessageConst.I_REGISTERED.getMessage());
-
                 //一覧画面にリダイレクト
                 redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX);
             }
@@ -164,11 +163,10 @@ public class ReportAction extends ActionBase {
             putRequestScope(AttributeConst.REPORT, rv); //取得した日報データ
             putSessionScope(AttributeConst.REPORT, rv); //取得した日報データ
 
-            //reportを条件にいいねデータを取得する
-            GoodView gv = gservice.findOne(getRequestParam(AttributeConst.GOD_REPORT));
-            putRequestScope(AttributeConst.GOOD, gv);
+            GoodView gv = gservice.findOne(rv.getEmployee().getId());
+            putRequestScope(AttributeConst.GOOD, gv); //取得したいいねデータ
 
-            //ログイン中の従業員が作成した日報データを、指定されたページ数の一覧画面に表示する分取得する
+
             //日報が作成したいいねデータを、指定されたページ数の一覧画面に表示する分取得する
             int page = getPage();
             List<GoodView> goods = gservice.getMinePerPageReport(rv, page);

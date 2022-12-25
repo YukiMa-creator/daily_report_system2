@@ -34,7 +34,6 @@ public interface JpaConst {
     //日報テーブルカラム
     String REP_COL_ID = "id"; //id
     String REP_COL_EMP = "employee_id"; //日報を作成した従業員のid
-    String REP_COL_GOD = "good_id"; //日報を作成したいいねのid
     String REP_COL_REP_DATE = "report_date"; //いつの日報かを示す日付
     String REP_COL_TITLE = "title"; //日報のタイトル
     String REP_COL_CONTENT = "content"; //日報の内容
@@ -60,6 +59,8 @@ public interface JpaConst {
     String JPQL_PARM_PASSWORD = "password"; //パスワード
     String JPQL_PARM_EMPLOYEE = "employee"; //従業員
     String JPQL_PARM_REPORT = "report"; //日報
+    String JPQL_PARM_EMPLOYEE_ID = "employee_id"; //従業員
+    String JPQL_PARM_REPORT_ID = "report_id"; //日報
     String JPQL_PARM_GOOD = "good"; //いいね
 
     //NamedQueryの nameとquery
@@ -71,7 +72,10 @@ public interface JpaConst {
     String Q_EMP_COUNT_DEF = "SELECT COUNT(e) FROM Employee AS e";
     //社員番号とハッシュ化済パスワードを条件に未削除の従業員を取得する
     String Q_EMP_GET_BY_CODE_AND_PASS = ENTITY_EMP + ".getByCodeAndPass";
-    String Q_EMP_GET_BY_CODE_AND_PASS_DEF = "SELECT e FROM Employee AS e WHERE e.deleteFlag = 0 AND e.code = :" + JPQL_PARM_CODE + " AND e.password = :" + JPQL_PARM_PASSWORD;
+    String Q_EMP_GET_BY_CODE_AND_PASS_DEF = "SELECT e FROM Employee AS e WHERE e.deleteFlag = 0 AND e.code = :" + JPQL_PARM_CODE + " AND e.password = :" + JPQL_PARM_PASSWORD; //社員番号とハッシュ化済パスワードを条件に未削除の従業員を取得する
+    //report_idとemployee_idを条件にいいねを取得する
+    String Q_GOD_GET_BY_REPORT_AND_EMPLOYEE = ENTITY_GOD + ".getByReportAndEmployee";
+    String Q_GOD_GET_BY_REPORT_AND_EMPLOYEE_DEF = "SELECT g FROM Good AS g WHERE g.report_id = :" + JPQL_PARM_REPORT_ID + " AND g.employee_id = :" + JPQL_PARM_EMPLOYEE_ID;
     //指定した社員番号を保持する従業員の件数を取得する
     String Q_EMP_COUNT_REGISTERED_BY_CODE = ENTITY_EMP + ".countRegisteredByCode";
     String Q_EMP_COUNT_REGISTERED_BY_CODE_DEF = "SELECT COUNT(e) FROM Employee AS e WHERE e.code = :" + JPQL_PARM_CODE;
@@ -105,7 +109,4 @@ public interface JpaConst {
   //指定した日報が作成したいいねを全件idの降順で取得する
     String Q_GOD_GET_ALL_MINE_REPORT = ENTITY_GOD + ".getAllMineReport";
     String Q_GOD_GET_ALL_MINE_REPORT_DEF = "SELECT g FROM Good AS g WHERE g.report = :" + JPQL_PARM_REPORT + " ORDER BY g.id DESC";
-  //reportを条件にいいねを取得する
-    String Q_GOD_GET_BY_REPORT_ID = ENTITY_GOD + ".getByReportId";
-    String Q_GOD_GET_BY_REPORT_ID_DEF = "SELECT g FROM Good AS g WHERE g.report = :" + JPQL_PARM_REPORT;
 }

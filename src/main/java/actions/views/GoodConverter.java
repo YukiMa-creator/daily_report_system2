@@ -49,15 +49,15 @@ public class GoodConverter {
      * @param list DTOモデルのリスト
      * @return Viewモデルのリスト
      */
-    public static List<GoodView> toViewList(List<Good> list){
-    List<GoodView> gvs = new ArrayList<>();
+    public static List<GoodView> toViewList(List<Good> list) {
+        List<GoodView> gvs = new ArrayList<>();
 
-    for(Good g : list) {
-        gvs.add(toView(g));
+        for (Good g : list) {
+            gvs.add(toView(g));
+        }
+
+        return gvs;
     }
-
-    return gvs;
-}
 
     /**
      * Viewモデルの全フィールドの内容をDTOのフィールドにコピーする
@@ -72,4 +72,4 @@ public class GoodConverter {
         g.setCreatedAt(gv.getCreatedAt());
     }
 
-    }
+}

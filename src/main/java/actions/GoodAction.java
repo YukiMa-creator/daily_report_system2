@@ -133,7 +133,6 @@ public class GoodAction extends ActionBase {
 
                     //セッションに更新完了のフラッシュメッセージを設定
                     putSessionScope(AttributeConst.FLUSH, MessageConst.I_REGISTERED.getMessage());
-
                     //一覧画面にリダイレクト
                     redirect(ForwardConst.ACT_GOD, ForwardConst.CMD_INDEX);
                 }
@@ -151,7 +150,7 @@ public class GoodAction extends ActionBase {
 
         //idを条件に日報データを取得する
         GoodView gv = service.findOne(toNumber(getRequestParam(AttributeConst.GOD_ID)));
-        ReportView rv = rservice.findOne(toNumber(getRequestParam(AttributeConst.GOD_REPORT)));
+        ReportView rv = rservice.findOne(toNumber(getRequestParam(AttributeConst.GOD_ID)));
 
         if (gv == null && rv == null) {
             //該当の日報データが存在しない場合はエラー画面を表示
@@ -180,14 +179,14 @@ public class GoodAction extends ActionBase {
         //セッションからログイン中の従業員情報を取得
         EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
 
-        ReportView rv = (ReportView) getSessionScope(AttributeConst.REPORT);
+        //ReportView rv = (ReportView) getSessionScope(AttributeConst.REPORT);
 
         if (gv == null || ev.getId() != gv.getEmployee().getId()) {
             //該当のいいねデータが存在しない、または
             //ログインしている従業員がいいねの作成者でない場合はエラー画面を表示
             forward(ForwardConst.FW_ERR_UNKNOWN);
 
-        } else {
+        }else {
 
             putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
             putRequestScope(AttributeConst.GOOD, gv); //取得した日報データ

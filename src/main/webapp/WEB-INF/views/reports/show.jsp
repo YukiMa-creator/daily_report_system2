@@ -82,11 +82,8 @@
                 </c:forEach>
             </tbody>
         </table>
-
-                <c:set var="good" value="${gv}"/>
-<p><c:out value="${good.report.title}"/></p>
         <c:choose>
-            <c:when test="${good.employee.name == sessionScope.login_employee.name && good.rv.title == sessionScope.rv.title}">
+            <c:when test="${good != null}">
                 <p>
                     <a
                         href="<c:url value='?action=${actGod}&command=${commDry}&id=${good.id}' />">いいねを解除する</a>
